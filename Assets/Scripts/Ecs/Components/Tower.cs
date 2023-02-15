@@ -16,6 +16,7 @@ namespace Ecs.Components
     [Serializable]
     public struct TowerComponent
     {
+        [field: SerializeField] public Transform Provider { get; private set; }
         [field: SerializeField] public float Range { get; private set; }
     }
 }

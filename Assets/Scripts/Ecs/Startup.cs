@@ -19,9 +19,10 @@ namespace Ecs
         {
             _systems = new EcsSystems(World);
             _fixedSystems = new EcsSystems(World);
-            
+
             _systems
                 .Add(new MonsterSpawnSystem())
+                .Add(new TargetSelectionSystem())
                 .Init();
 
             _fixedSystems

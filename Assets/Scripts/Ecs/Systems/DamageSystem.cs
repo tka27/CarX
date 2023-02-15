@@ -16,11 +16,10 @@ namespace Ecs.Systems
                 var request = damageRequestPool.Get(entity);
                 hitable.CurrentHealth -= request.Damage;
                 damageRequestPool.Del(entity);
-                if (hitable.CurrentHealth > 0)
-                {
-                    hitable.Provider.SetActive(false);
-                    Startup.World.DelEntity(entity);
-                }
+                if (hitable.CurrentHealth > 0) continue;
+                
+                hitable.Provider.gameObject.SetActive(false);
+                Startup.World.DelEntity(entity);
             }
         }
     }
