@@ -1,0 +1,3 @@
+[submodule "Assets/SubLib"]
+	path = Assets/SubLib
+	url = https://github.com/tka27/SubLib.git
