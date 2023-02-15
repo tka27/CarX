@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "com.leopotam.ecslite": "https://github.com/Leopotam/ecslite.git",
+    "com.leopotam.ecslite": "https://github.com/voody2506/ecslite.git",
+    "com.voody.unileo.lite": "https://github.com/voody2506/UniLeo-Lite.git",
     "com.unity.collab-proxy": "1.17.6",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.16",
