@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class Monster : MonoBehaviour {
+public class OldMonster : MonoBehaviour {
 
 	public GameObject m_moveTarget;
 	public float m_speed = 0.1f;

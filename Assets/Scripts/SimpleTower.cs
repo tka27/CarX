@@ -12,7 +12,7 @@ public class SimpleTower : MonoBehaviour {
 		if (m_projectilePrefab == null)
 			return;
 
-		foreach (var monster in FindObjectsOfType<Monster>()) {
+		foreach (var monster in FindObjectsOfType<OldMonster>()) {
 			if (Vector3.Distance (transform.position, monster.transform.position) > m_range)
 				continue;
 

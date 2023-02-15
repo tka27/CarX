@@ -20,7 +20,7 @@ public class GuidedProjectile : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other) {
-		var monster = other.gameObject.GetComponent<Monster> ();
+		var monster = other.gameObject.GetComponent<OldMonster> ();
 		if (monster == null)
 			return;
 
