@@ -6,13 +6,14 @@ namespace Ecs
     public class Ecs : MonoBehaviour
     {
         public static EcsWorld World { get; private set; }
-        private IEcsSystems _systems;
+        private EcsSystems _systems;
 
         void Start()
         {
             World = new();
             _systems = new EcsSystems(World);
             _systems
+                    
                 //.Add(new TestSystem1())
                 .Init();
         }
