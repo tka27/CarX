@@ -1,5 +1,5 @@
+using Data;
 using Ecs.Components;
-using Game.Scripts.Data;
 using Leopotam.EcsLite;
 using UnityEngine;
 

@@ -1,9 +1,9 @@
+using SubLib.Async;
 using Unity.Collections;
 using UnityEngine;
-using SubLib.Async;
 using static SubLib.Utils.Editor;
 
-namespace Game.Scripts.Data
+namespace Data
 {
     [RequireComponent(typeof(AsyncCancellation), typeof(LevelData))]
     public class LevelInitializer : MonoBehaviour, IAutoInit

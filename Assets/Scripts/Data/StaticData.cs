@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Scripts.Data
+namespace Data
 {
     public class StaticData : ScriptableObject
     {

@@ -1,4 +1,4 @@
-using Game.Scripts.Data;
+using Data;
 using Leopotam.EcsLite;
 using UnityEngine;
 

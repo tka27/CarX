@@ -28,5 +28,7 @@ namespace MonoBehaviours
 
             Entity = Startup.World.PackEntity(entity);
         }
+
+      
     }
 }
