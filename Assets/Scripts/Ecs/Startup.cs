@@ -8,22 +8,39 @@ namespace Ecs
     {
         public static EcsWorld World { get; private set; }
         private EcsSystems _systems;
+        private EcsSystems _fixedSystems;
 
-        void Start()
+        private void Awake()
         {
             World = new();
+        }
+
+        private void Start()
+        {
             _systems = new EcsSystems(World);
+            _fixedSystems = new EcsSystems(World);
+            
             _systems
                 .Add(new MonsterSpawnSystem())
                 .Init();
+
+            _fixedSystems
+                .Add(new MonsterMoveSystem())
+                .Init();
         }
 
-        void Update()
+        private void Update()
         {
             _systems?.Run();
         }
 
-        void OnDestroy()
+        private void FixedUpdate()
+        {
+            _fixedSystems?.Run();
+        }
+
+
+        private void OnDestroy()
         {
             if (_systems != null)
             {

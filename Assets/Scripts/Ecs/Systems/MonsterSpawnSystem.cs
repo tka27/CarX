@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace Ecs.Systems
 {
-    public class MonsterSpawnSystem : IEcsRunSystem
+    public sealed class MonsterSpawnSystem : IEcsRunSystem
     {
         private float _cooldownLeft;
 
         public void Run(EcsSystems systems)
         {
             _cooldownLeft += Time.deltaTime;
-            if (!(_cooldownLeft > LevelData.Instance.MonstersSpawnCooldown)) return;
+            if (_cooldownLeft < LevelData.Instance.MonstersSpawnCooldown) return;
 
             _cooldownLeft -= LevelData.Instance.MonstersSpawnCooldown;
             SpawnMonster();
