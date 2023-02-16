@@ -11,6 +11,10 @@ namespace ScriptableObjects
         [Header("X - distance")] public AnimationCurve TimeCurve;
         public AnimationCurve VerticalAngleCurve;
 
+
+        public float GetTimeToTarget(float distanceToTarget) => TimeCurve.Evaluate(distanceToTarget);
+        public float GetVerticalAngle(float distanceToTarget) => VerticalAngleCurve.Evaluate(distanceToTarget);
+
         public void Clear()
         {
             ClearCurve(TimeCurve);

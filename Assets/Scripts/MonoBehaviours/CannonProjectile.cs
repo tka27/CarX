@@ -8,6 +8,8 @@ namespace MonoBehaviours
     {
         [SerializeField, HideInInspector] private Rigidbody _rigidbody;
 
+        public Rigidbody Rigidbody => _rigidbody;
+
         private void OnValidate()
         {
             gameObject.TrySetComponent(ref _rigidbody);

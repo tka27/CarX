@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CannonProjectile : MonoBehaviour {
+public class OldCannonProjectile : MonoBehaviour {
 	public float m_speed = 0.2f;
 	public int m_damage = 10;
 

@@ -1,4 +1,5 @@
 using System;
+using ScriptableObjects;
 using UnityEngine;
 using Voody.UniLeo.Lite;
 
@@ -12,6 +13,7 @@ namespace Ecs.Components
     public struct CannonTowerComponent
     {
         [field: SerializeField] public float AimSpeed { get; private set; }
+        [field: SerializeField] public AimingResults AimingResults { get; private set; }
         [field: SerializeField] public Transform HorizontalAimTransform { get; private set; }
         [field: SerializeField] public Transform VerticalAimTransform { get; private set; }
     }

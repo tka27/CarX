@@ -38,6 +38,7 @@ namespace Ecs
 
             _fixedSystems
                 .Add(new MonsterMoveSystem())
+                .Add(new CannonTowerAimSystem())
                 .Init();
         }
 
