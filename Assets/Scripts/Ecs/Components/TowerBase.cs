@@ -5,7 +5,7 @@ using Voody.UniLeo.Lite;
 
 namespace Ecs.Components
 {
-    public sealed class Tower : MonoProvider<TowerComponent>
+    public sealed class TowerBase : MonoProvider<TowerBaseComponent>
     {
         private void OnDrawGizmos()
         {
@@ -15,7 +15,7 @@ namespace Ecs.Components
     }
 
     [Serializable]
-    public struct TowerComponent
+    public struct TowerBaseComponent
     {
         [field: SerializeField] public Transform ShootPoint { get; private set; }
         [field: SerializeField] public Transform SelfTransform { get; private set; }

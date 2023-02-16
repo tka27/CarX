@@ -10,13 +10,13 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _towerFilter = Startup.World.Filter<HasTargetComponent>().Inc<TowerComponent>().End();
+            _towerFilter = Startup.World.Filter<HasTargetComponent>().Inc<TowerBaseComponent>().End();
         }
 
         public void Run(EcsSystems systems)
         {
             var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
-            var towerPool = Startup.World.GetPool<TowerComponent>();
+            var towerPool = Startup.World.GetPool<TowerBaseComponent>();
             var hitablePool = Startup.World.GetPool<HitableComponent>();
 
             foreach (var towerEntity in _towerFilter)

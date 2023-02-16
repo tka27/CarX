@@ -11,7 +11,7 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _towersFilter = Startup.World.Filter<TowerComponent>().Exc<HasTargetComponent>().End();
+            _towersFilter = Startup.World.Filter<TowerBaseComponent>().Exc<HasTargetComponent>().End();
             _monstersFilter = Startup.World.Filter<HitableComponent>().End();
         }
 
@@ -19,7 +19,7 @@ namespace Ecs.Systems
         {
             foreach (var towerEntity in _towersFilter)
             {
-                var tower = Startup.World.GetPool<TowerComponent>().Get(towerEntity);
+                var tower = Startup.World.GetPool<TowerBaseComponent>().Get(towerEntity);
 
                 foreach (var hitableEntity in _monstersFilter)
                 {

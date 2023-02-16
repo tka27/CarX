@@ -10,8 +10,8 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _towersFilter = Startup.World.Filter<TowerComponent>().Inc<HasTargetComponent>()
-                .Inc<CrystalTowerTagComponent>().Exc<CooldownComponent>().End();
+            _towersFilter = Startup.World.Filter<TowerBaseComponent>().Inc<HasTargetComponent>()
+                .Inc<CrystalTowerComponent>().Exc<CooldownComponent>().End();
         }
 
         public void Run(EcsSystems systems)
@@ -21,7 +21,7 @@ namespace Ecs.Systems
                 var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
 
                 ref var target = ref hasTargetPool.Get(towerEntity).Target;
-                ref var tower = ref Startup.World.GetPool<TowerComponent>().Get(towerEntity);
+                ref var tower = ref Startup.World.GetPool<TowerBaseComponent>().Get(towerEntity);
                 var projectile = PoolContainer.Instance.CrystalProjectiles.Get(tower.ShootPoint.position);
                 projectile.Fire(target);
 
