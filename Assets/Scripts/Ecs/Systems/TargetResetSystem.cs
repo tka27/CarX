@@ -1,24 +1,37 @@
 using Ecs.Components;
+using ExtensionsMain;
 using Leopotam.EcsLite;
 
 namespace Ecs.Systems
 {
     public class TargetResetSystem : IEcsRunSystem, IEcsInitSystem
     {
-        private EcsFilter _filter;
+        private EcsFilter _towerFilter;
 
         public void Init(EcsSystems systems)
         {
-            _filter = Startup.World.Filter<HasTargetComponent>().Inc<TowerComponent>().End();
+            _towerFilter = Startup.World.Filter<HasTargetComponent>().Inc<TowerComponent>().End();
         }
 
         public void Run(EcsSystems systems)
         {
             var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
-            foreach (var entity in _filter)
+            var towerPool = Startup.World.GetPool<TowerComponent>();
+            var hitablePool = Startup.World.GetPool<HitableComponent>();
+
+            foreach (var towerEntity in _towerFilter)
             {
-                if (!hasTargetPool.Get(entity).Target.Unpack(Startup.World, out var targetEntity))
-                    hasTargetPool.Del(entity);
+                if (!hasTargetPool.Get(towerEntity).Target.Unpack(Startup.World, out var targetEntity))
+                {
+                    hasTargetPool.Del(towerEntity);
+                    continue;
+                }
+
+                ref var tower = ref towerPool.Get(towerEntity);
+                ref var hitable = ref hitablePool.Get(targetEntity);
+                float distance = tower.SelfTransform.DistanceTo(hitable.Transform.position);
+
+                if (distance > tower.Stats.Range) hasTargetPool.Del(towerEntity);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace Ecs.Components
     public struct TowerComponent
     {
         [field: SerializeField] public Transform ShootPoint { get; private set; }
-        [field: SerializeField] public Transform Provider { get; private set; }
+        [field: SerializeField] public Transform SelfTransform { get; private set; }
         [field: SerializeField] public TowerStats Stats { get; private set; }
     }
 }

@@ -24,7 +24,7 @@ namespace Ecs.Systems
                 foreach (var hitableEntity in _monstersFilter)
                 {
                     var hitable = Startup.World.GetPool<HitableComponent>().Get(hitableEntity);
-                    if (hitable.Transform.DistanceTo(tower.Provider.position) > tower.Stats.Range) continue;
+                    if (hitable.Transform.DistanceTo(tower.SelfTransform.position) > tower.Stats.Range) continue;
 
                     ref var hasTargetComponent = ref Startup.World.GetPool<HasTargetComponent>().Add(towerEntity);
                     hasTargetComponent.Target = Startup.World.PackEntity(hitableEntity);
