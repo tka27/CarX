@@ -23,19 +23,20 @@ namespace Ecs
 
             _systems
 #if UNITY_EDITOR
-                // add debug systems for custom worlds here, for example:
-                // .Add (new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem ("events"))
                 .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
 #endif
                 .ConvertScene()
                 .Add(new MonsterSpawnSystem())
                 .Add(new TargetSelectionSystem())
                 .Add(new CrystalTowerAttackSystem())
+                .Add(new DamageSystem())
                 .Add(new CooldownSystem())
+                .Add(new TargetResetSystem())
+               // .Add(new LightningProjectilesLifeControlSystem())
+                .Add(new LightningProjectilesFollowSystem())
                 .Init();
 
             _fixedSystems
-                .ConvertScene()
                 .Add(new MonsterMoveSystem())
                 .Init();
         }

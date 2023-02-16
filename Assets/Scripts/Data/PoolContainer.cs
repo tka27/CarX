@@ -9,7 +9,7 @@ namespace Data
         public static PoolContainer Instance { get; private set; }
         [field: SerializeField] public ObjectPool<Monster> Monsters { get; private set; }
         [field: SerializeField] public ObjectPool<CannonProjectile> CannonProjectiles { get; private set; }
-        [field: SerializeField] public ObjectPool<CrystalProjectile> CrystalProjectiles { get; private set; }
+        [field: SerializeField] public ObjectPool<LightningProjectile> CrystalProjectiles { get; private set; }
 
         private void Awake()
         {

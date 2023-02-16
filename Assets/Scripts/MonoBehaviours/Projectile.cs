@@ -10,13 +10,15 @@ namespace MonoBehaviours
     {
         [SerializeField] private int _damage = 50;
 
-        private void OnTriggerEnter(Collider other)
+        void OnTriggerEnter(Collider other)
         {
-            if (!TryGetComponent<Monster>(out var monster)) return;
+            if (!other.TryGetComponent<Monster>(out var monster)) return;
+            gameObject.SetActive(false);
 
             monster.Entity.Unpack(Startup.World, out var entity);
-            Startup.World.GetPool<DamageRequest>().Add(entity).Damage = _damage;
-            gameObject.SetActive(false);
+            var pool = Startup.World.GetPool<DamageRequest>();
+            if (pool.Has(entity)) pool.Get(entity).Damage += _damage;
+            else pool.Add(entity).Damage = _damage;
         }
     }
 }

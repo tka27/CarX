@@ -1,7 +1,9 @@
+using Leopotam.EcsLite;
+
 namespace Ecs.Components
 {
     public struct HasTargetComponent
     {
-        public HitableComponent Target;
+        public EcsPackedEntity Target;
     }
 }

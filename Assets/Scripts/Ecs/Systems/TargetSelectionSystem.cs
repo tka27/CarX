@@ -27,7 +27,8 @@ namespace Ecs.Systems
                     if (hitable.Transform.DistanceTo(tower.Provider.position) > tower.Stats.Range) continue;
 
                     ref var hasTargetComponent = ref Startup.World.GetPool<HasTargetComponent>().Add(towerEntity);
-                    hasTargetComponent.Target = hitable;
+                    hasTargetComponent.Target = Startup.World.PackEntity(hitableEntity);
+                    break;
                 }
             }
         }
