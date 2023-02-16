@@ -15,11 +15,6 @@ namespace MonoBehaviours
             _cts = new(this.GetCancellationTokenOnDestroy());
         }
 
-        private void OnEnable()
-        {
-            _cts.Create();
-        }
-
         private void OnDisable()
         {
             _cts.Cancel();
@@ -27,6 +22,7 @@ namespace MonoBehaviours
 
         public void Fire(Transform target)
         {
+            _cts.Create();
             transform.MoveAsync(target, _speed, true, _cts.Token).Forget();
         }
     }

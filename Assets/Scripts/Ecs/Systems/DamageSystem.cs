@@ -18,7 +18,7 @@ namespace Ecs.Systems
                 damageRequestPool.Del(entity);
                 if (hitable.CurrentHealth > 0) continue;
                 
-                hitable.Provider.gameObject.SetActive(false);
+                hitable.Transform.gameObject.SetActive(false);
                 Startup.World.DelEntity(entity);
             }
         }

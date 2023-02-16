@@ -4,7 +4,7 @@ namespace Ecs.Components
 {
     public struct HitableComponent
     {
-        public Transform Provider;
+        public Transform Transform;
         public int MaxHealth;
         public int CurrentHealth;
     }

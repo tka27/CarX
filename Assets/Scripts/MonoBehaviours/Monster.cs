@@ -24,7 +24,7 @@ namespace MonoBehaviours
             ref var hitable = ref Startup.World.GetPool<HitableComponent>().Add(entity);
             hitable.MaxHealth = Stats.MaxHealth;
             hitable.CurrentHealth = hitable.MaxHealth;
-            hitable.Provider = transform;
+            hitable.Transform = transform;
 
             Entity = Startup.World.PackEntity(entity);
         }

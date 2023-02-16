@@ -1,6 +1,7 @@
 using Ecs.Systems;
 using Leopotam.EcsLite;
 using UnityEngine;
+using Voody.UniLeo.Lite;
 
 namespace Ecs
 {
@@ -21,11 +22,15 @@ namespace Ecs
             _fixedSystems = new EcsSystems(World);
 
             _systems
+                .ConvertScene()
                 .Add(new MonsterSpawnSystem())
                 .Add(new TargetSelectionSystem())
+                .Add(new CrystalTowerAttackSystem())
+                .Add(new CooldownSystem())
                 .Init();
 
             _fixedSystems
+                .ConvertScene()
                 .Add(new MonsterMoveSystem())
                 .Init();
         }
