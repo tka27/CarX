@@ -32,7 +32,7 @@ namespace Ecs
                 .Add(new DamageSystem())
                 .Add(new CooldownSystem())
                 .Add(new TargetResetSystem())
-               // .Add(new LightningProjectilesLifeControlSystem())
+                .Add(new LightningProjectilesLifeControlSystem())
                 .Add(new LightningProjectilesFollowSystem())
                 .Init();
 

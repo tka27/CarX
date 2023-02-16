@@ -19,7 +19,7 @@ namespace Ecs.Systems
 
             foreach (var entity in _filter)
             {
-                if (!hasTargetPool.Get(entity).Target.Unpack(Startup.World, out _)) continue;
+                if (hasTargetPool.Get(entity).Target.Unpack(Startup.World, out _)) continue;
 
                 lightningProjectilePool.Get(entity).Transform.gameObject.SetActive(false);
             }
