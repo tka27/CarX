@@ -12,8 +12,8 @@ namespace MonoBehaviours
 
         void OnTriggerEnter(Collider other)
         {
-            if (!other.TryGetComponent<Monster>(out var monster)) return;
             gameObject.SetActive(false);
+            if (!other.TryGetComponent<Monster>(out var monster)) return;
 
             monster.Entity.Unpack(Startup.World, out var entity);
             var pool = Startup.World.GetPool<DamageRequest>();

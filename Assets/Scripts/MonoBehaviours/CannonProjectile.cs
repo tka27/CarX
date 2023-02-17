@@ -14,10 +14,5 @@ namespace MonoBehaviours
         {
             gameObject.TrySetComponent(ref _rigidbody);
         }
-
-        public void Fire(Vector3 direction)
-        {
-            //todo
-        }
     }
 }

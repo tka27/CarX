@@ -1,7 +1,5 @@
-using Data;
 using DefaultNamespace;
 using Ecs.Components;
-using ExtensionsMain;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -21,25 +19,44 @@ namespace Ecs.Systems
             var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
             var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
             var movablePool = Startup.World.GetPool<MovableComponent>();
+            var towerPool = Startup.World.GetPool<TowerBaseComponent>();
             foreach (var cannonEntity in _towerFilter)
             {
                 ref var cannonTower = ref cannonPool.Get(cannonEntity);
-                hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
+                ref var towerBase = ref towerPool.Get(cannonEntity);
 
+                hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
                 var targetRigidbody = movablePool.Get(targetEntity).Rigidbody;
 
-
                 Vector3 predictionPoint =
-                    PredictionCalculator.GetPredictionPoint(cannonTower.HorizontalAimTransform, targetRigidbody,
+                    PredictionCalculator.GetPredictionPoint(towerBase.SelfTransform, targetRigidbody,
                         cannonTower.AimingResults.ProjectileStartSpeed);
 
-                float distanceToTarget = (predictionPoint - cannonTower.HorizontalAimTransform.position).magnitude;
+                float distanceToTarget = (predictionPoint - towerBase.SelfTransform.position).magnitude;
                 float verticalAngle = cannonTower.AimingResults.GetVerticalAngle(distanceToTarget);
-                cannonTower.VerticalAimTransform.localRotation = Quaternion.Euler(new Vector3(verticalAngle, 0, 0));
 
+                cannonTower.VerticalAimTransform.localRotation = Quaternion.RotateTowards(
+                    cannonTower.VerticalAimTransform.localRotation, Quaternion.Euler(verticalAngle, 0, 0),
+                    cannonTower.AimSpeed * Time.fixedDeltaTime);
+
+
+                var lookDirection = predictionPoint - cannonTower.HorizontalAimTransform.position;
+                lookDirection.y = 0;
+                var lookRotation = Quaternion.LookRotation(lookDirection);
+
+                cannonTower.HorizontalAimTransform.rotation =
+                    Quaternion.RotateTowards(cannonTower.HorizontalAimTransform.rotation, lookRotation,
+                        cannonTower.AimSpeed * Time.fixedDeltaTime);
+
+
+                var angle = SubLib.Utils.Vector3.ProjectionAngle(cannonTower.HorizontalAimTransform.forward,
+                    predictionPoint - towerBase.SelfTransform.position, Vector3.up);
+                cannonTower.Aimed = angle < float.Epsilon;
+
+#if UNITY_EDITOR
                 Debug.DrawRay(cannonTower.HorizontalAimTransform.position,
-                    predictionPoint - cannonTower.HorizontalAimTransform.position);
-                cannonTower.HorizontalAimTransform.HorizontalLookAt(predictionPoint);
+                    predictionPoint - cannonTower.HorizontalAimTransform.position, Color.black);
+#endif
             }
         }
     }
