@@ -21,8 +21,8 @@ namespace Aiming
             _results.Clear();
             _projectile.OnLandedEvent += OnProjectileLanded;
             _projectile.Shoot(_verticalAimingPart);
-            _results.ProjectileMass = _projectile.Rigidbody.mass.ToString();
-            _results.ProjectileStartSpeed = _projectile.StartSpeed.ToString();
+            _results.ProjectileMass = _projectile.Rigidbody.mass;
+            _results.ProjectileStartSpeed = _projectile.StartSpeed;
         }
 
         private void OnDestroy()

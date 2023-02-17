@@ -20,19 +20,18 @@ namespace Ecs.Systems
         {
             var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
             var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
-            var hitablePool = Startup.World.GetPool<HitableComponent>();
             var movablePool = Startup.World.GetPool<MovableComponent>();
             foreach (var cannonEntity in _towerFilter)
             {
                 ref var cannonTower = ref cannonPool.Get(cannonEntity);
                 hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
 
-                var targetTransform = hitablePool.Get(targetEntity).Transform;
                 var targetRigidbody = movablePool.Get(targetEntity).Rigidbody;
 
 
                 Vector3 predictionPoint =
-                    PredictionCalculator.GetPredictionPoint(cannonTower.HorizontalAimTransform, targetRigidbody, 20);
+                    PredictionCalculator.GetPredictionPoint(cannonTower.HorizontalAimTransform, targetRigidbody,
+                        cannonTower.AimingResults.ProjectileStartSpeed);
 
                 float distanceToTarget = (predictionPoint - cannonTower.HorizontalAimTransform.position).magnitude;
                 float verticalAngle = cannonTower.AimingResults.GetVerticalAngle(distanceToTarget);

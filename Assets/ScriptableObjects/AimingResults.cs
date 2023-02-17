@@ -7,8 +7,8 @@ namespace ScriptableObjects
     [CreateAssetMenu]
     public class AimingResults : ScriptableObject
     {
-        public string ProjectileMass;
-        public string ProjectileStartSpeed;
+        public float ProjectileMass;
+        public float ProjectileStartSpeed;
         [Header("X - distance")] public AnimationCurve TimeCurve;
         public AnimationCurve VerticalAngleCurve;
 

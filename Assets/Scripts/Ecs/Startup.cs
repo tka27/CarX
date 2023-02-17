@@ -34,6 +34,7 @@ namespace Ecs
                 .Add(new TargetResetSystem())
                 .Add(new LightningProjectilesLifeControlSystem())
                 .Add(new LightningProjectilesFollowSystem())
+                .Add(new CannonTowerAttackSystem())
                 .Init();
 
             _fixedSystems
