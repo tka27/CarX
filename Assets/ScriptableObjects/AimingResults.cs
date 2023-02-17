@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using static UnityEditor.AnimationUtility;
 
@@ -25,6 +26,9 @@ namespace ScriptableObjects
         {
             Smooth(TimeCurve);
             Smooth(VerticalAngleCurve);
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         private void Smooth(AnimationCurve curve)

@@ -34,12 +34,13 @@ namespace Ecs.Systems
                 Vector3 predictionPoint =
                     PredictionCalculator.GetPredictionPoint(cannonTower.HorizontalAimTransform, targetRigidbody, 20);
 
-                // float distanceToTarget = (predictionPoint - cannonTower.HorizontalAimTransform.position).magnitude;
+                float distanceToTarget = (predictionPoint - cannonTower.HorizontalAimTransform.position).magnitude;
+                float verticalAngle = cannonTower.AimingResults.GetVerticalAngle(distanceToTarget);
+                cannonTower.VerticalAimTransform.localRotation = Quaternion.Euler(new Vector3(verticalAngle, 0, 0));
 
                 Debug.DrawRay(cannonTower.HorizontalAimTransform.position,
                     predictionPoint - cannonTower.HorizontalAimTransform.position);
-                cannonTower.HorizontalAimTransform.HorizontalSoftLookAt(predictionPoint,
-                    cannonTower.AimSpeed * Time.fixedDeltaTime);
+                cannonTower.HorizontalAimTransform.HorizontalLookAt(predictionPoint);
             }
         }
     }
