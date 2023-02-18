@@ -16,21 +16,22 @@ namespace Ecs.Systems
 
         public void Run(EcsSystems systems)
         {
-            var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
-            var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
-            var movablePool = Startup.World.GetPool<MovableComponent>();
-            var towerPool = Startup.World.GetPool<TowerBaseComponent>();
             foreach (var cannonEntity in _towerFilter)
             {
+                var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
+                var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
+                var movablePool = Startup.World.GetPool<MovableComponent>();
+                var towerPool = Startup.World.GetPool<TowerBaseComponent>();
+
+
                 ref var cannonTower = ref cannonPool.Get(cannonEntity);
                 ref var towerBase = ref towerPool.Get(cannonEntity);
 
                 hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
                 var targetRigidbody = movablePool.Get(targetEntity).Rigidbody;
 
-                Vector3 predictionPoint =
-                    PredictionCalculator.GetPredictionPoint(towerBase.SelfTransform, targetRigidbody,
-                        cannonTower.AimingResults.ProjectileStartSpeed);
+                Vector3 predictionPoint = PredictionCalculator.GetPredictionPoint(towerBase.SelfTransform,
+                    targetRigidbody, cannonTower.AimingResults.Projectile.StartSpeed);
 
                 float distanceToTarget = (predictionPoint - towerBase.SelfTransform.position).magnitude;
                 float verticalAngle = cannonTower.AimingResults.GetVerticalAngle(distanceToTarget);

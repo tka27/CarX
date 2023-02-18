@@ -10,6 +10,12 @@ namespace MonoBehaviours
 
         public Rigidbody Rigidbody => _rigidbody;
 
+        public void Shoot(Transform from)
+        {
+            transform.position = from.position;
+            Rigidbody.velocity = from.forward * StartSpeed;
+        }
+
         private void OnValidate()
         {
             gameObject.TrySetComponent(ref _rigidbody);

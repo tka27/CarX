@@ -1,4 +1,6 @@
+using MonoBehaviours;
 using ScriptableObjects;
+using SubLib.Extensions;
 using UnityEngine;
 
 namespace Aiming
@@ -6,61 +8,65 @@ namespace Aiming
     public class AimingHandler : MonoBehaviour
     {
         [SerializeField] private Transform _verticalAimingPart;
-        [SerializeField] private AimingProjectile _projectile;
-
         [SerializeField] private float _angleStep = 5;
-
-
         [SerializeField] private AimingResults _results;
-
-        private float _lastTime;
+        private CannonProjectile _aimingProjectile;
         private float _lastDistance;
 
         private void Start()
         {
-            _results.Clear();
-            _projectile.OnLandedEvent += OnProjectileLanded;
-            _projectile.Shoot(_verticalAimingPart);
-            _results.ProjectileMass = _projectile.Rigidbody.mass;
-            _results.ProjectileStartSpeed = _projectile.StartSpeed;
+            ClearResults();
+            _aimingProjectile = Instantiate(_results.Projectile);
+            _aimingProjectile.OnLandedEvent += OnProjectileLanded;
+            _aimingProjectile.Shoot(_verticalAimingPart);
         }
 
         private void OnDestroy()
         {
-            _projectile.OnLandedEvent -= OnProjectileLanded;
-        }
-
-        private void Update()
-        {
-            _lastTime += Time.deltaTime;
+            _aimingProjectile.OnLandedEvent -= OnProjectileLanded;
         }
 
         private void OnProjectileLanded()
         {
-            _lastDistance = (_projectile.transform.position - transform.position).magnitude;
+            _aimingProjectile.gameObject.SetActive(true);
+            _lastDistance = (_aimingProjectile.transform.position - transform.position).magnitude;
             var currentAngle = _verticalAimingPart.localRotation.eulerAngles;
 
             float keyAngle = currentAngle.x;
             if (keyAngle > 45) keyAngle -= 360;
             var angleKeyframe = new Keyframe(_lastDistance, keyAngle);
 
-            var timeKeyframe = new Keyframe(_lastDistance, _lastTime);
 
             _results.VerticalAngleCurve.AddKey(angleKeyframe);
-            _results.TimeCurve.AddKey(timeKeyframe);
 
 
             currentAngle.x -= _angleStep;
             if (currentAngle.x is < 315 and > 30)
             {
-                _results.FinishResults();
+                FinishResults();
                 return;
             }
 
             _verticalAimingPart.localRotation = Quaternion.Euler(currentAngle);
+            _aimingProjectile.Shoot(_verticalAimingPart);
+        }
 
-            _projectile.Shoot(_verticalAimingPart);
-            _lastTime = 0;
+
+        private void ClearResults()
+        {
+            _results.VerticalAngleCurve.ClearCurve();
+        }
+
+        private void FinishResults()
+        {
+            _aimingProjectile.OnLandedEvent -= OnProjectileLanded;
+            _results.VerticalAngleCurve.AutoSmooth();
+
+#if UNITY_EDITOR
+            UnityEditor.EditorUtility.SetDirty(this);
+            UnityEditor.AssetDatabase.SaveAssets();
+            UnityEditor.AssetDatabase.Refresh();
+#endif
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using Ecs;
 using Ecs.Components;
 using Leopotam.EcsLite;
@@ -8,11 +9,14 @@ namespace MonoBehaviours
     [RequireComponent(typeof(SphereCollider))]
     public abstract class Projectile : MonoBehaviour
     {
+        public event Action OnLandedEvent;
         [SerializeField] private int _damage = 50;
+        [field: SerializeField] public float StartSpeed { get; private set; }
 
         void OnTriggerEnter(Collider other)
         {
             gameObject.SetActive(false);
+            OnLandedEvent?.Invoke();
             if (!other.TryGetComponent<Monster>(out var monster)) return;
 
             monster.Entity.Unpack(Startup.World, out var entity);

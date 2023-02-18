@@ -1,9 +1,6 @@
 using Data;
-using DefaultNamespace;
 using Ecs.Components;
-using ExtensionsMain;
 using Leopotam.EcsLite;
-using UnityEngine;
 
 namespace Ecs.Systems
 {
@@ -19,19 +16,16 @@ namespace Ecs.Systems
 
         public void Run(EcsSystems systems)
         {
-            var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
-            var cooldownPool = Startup.World.GetPool<CooldownComponent>();
-            var towerPool = Startup.World.GetPool<TowerBaseComponent>();
             foreach (var cannonEntity in _towerFilter)
             {
+                var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
+                var cooldownPool = Startup.World.GetPool<CooldownComponent>();
+                var towerPool = Startup.World.GetPool<TowerBaseComponent>();
+
                 ref var cannonTower = ref cannonPool.Get(cannonEntity);
                 if (!cannonTower.Aimed) continue;
 
-                var projectile =
-                    PoolContainer.Instance.CannonProjectiles.Get(cannonTower.VerticalAimTransform.position);
-
-                projectile.Rigidbody.velocity = cannonTower.VerticalAimTransform.forward *
-                                                cannonTower.AimingResults.ProjectileStartSpeed;
+                PoolContainer.Instance.CannonProjectiles.Get().Shoot(cannonTower.VerticalAimTransform);
 
                 cooldownPool.Add(cannonEntity).TimeLeft = towerPool.Get(cannonEntity).Stats.AttackCooldown;
             }
