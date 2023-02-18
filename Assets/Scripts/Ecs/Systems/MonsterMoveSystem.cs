@@ -11,12 +11,12 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _movableFilter = Startup.World.Filter<MovableComponent>().End();
+            _movableFilter = Startup.World.Filter<Movable>().End();
         }
 
         public void Run(EcsSystems systems)
         {
-            var movablePool = Startup.World.GetPool<MovableComponent>();
+            var movablePool = Startup.World.GetPool<Movable>();
 
             foreach (var entity in _movableFilter)
             {

@@ -1,4 +1,4 @@
-using DefaultNamespace;
+using Data;
 using Ecs.Components;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -11,16 +11,16 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _towerFilter = Startup.World.Filter<CannonTowerComponent>().Inc<HasTargetComponent>().End();
+            _towerFilter = Startup.World.Filter<CannonTower>().Inc<HasTarget>().End();
         }
 
         public void Run(EcsSystems systems)
         {
             foreach (var cannonEntity in _towerFilter)
             {
-                var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
-                var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
-                var movablePool = Startup.World.GetPool<MovableComponent>();
+                var cannonPool = Startup.World.GetPool<CannonTower>();
+                var hasTargetPool = Startup.World.GetPool<HasTarget>();
+                var movablePool = Startup.World.GetPool<Movable>();
                 var towerPool = Startup.World.GetPool<TowerBaseComponent>();
 
 
@@ -30,8 +30,8 @@ namespace Ecs.Systems
                 hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
                 var targetRigidbody = movablePool.Get(targetEntity).Rigidbody;
 
-                Vector3 predictionPoint = PredictionCalculator.GetPredictionPoint(towerBase.SelfTransform,
-                    targetRigidbody, cannonTower.AimingResults.Projectile.StartSpeed);
+                Vector3 predictionPoint = PredictionCalculator.GetPredictionPoint(towerBase.ShootPoint,
+                    targetRigidbody, LevelData.Instance.CannonProjectilesSpeed);
 
                 float distanceToTarget = (predictionPoint - towerBase.SelfTransform.position).magnitude;
                 float verticalAngle = cannonTower.AimingResults.GetVerticalAngle(distanceToTarget);

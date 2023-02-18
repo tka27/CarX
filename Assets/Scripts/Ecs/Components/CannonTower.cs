@@ -1,16 +1,11 @@
 using System;
 using ScriptableObjects;
 using UnityEngine;
-using Voody.UniLeo.Lite;
 
 namespace Ecs.Components
 {
-    public sealed class CannonTower : MonoProvider<CannonTowerComponent>
-    {
-    }
-
     [Serializable]
-    public struct CannonTowerComponent
+    public struct CannonTower
     {
         public bool Aimed;
         [field: SerializeField] public float AimSpeed { get; private set; }

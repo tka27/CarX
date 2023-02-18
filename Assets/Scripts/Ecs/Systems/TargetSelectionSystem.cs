@@ -11,7 +11,7 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _towersFilter = Startup.World.Filter<TowerBaseComponent>().Exc<HasTargetComponent>().End();
+            _towersFilter = Startup.World.Filter<TowerBaseComponent>().Exc<HasTarget>().End();
             _monstersFilter = Startup.World.Filter<HitableComponent>().End();
         }
 
@@ -26,7 +26,7 @@ namespace Ecs.Systems
                     var hitable = Startup.World.GetPool<HitableComponent>().Get(hitableEntity);
                     if (hitable.Transform.DistanceTo(tower.SelfTransform.position) > tower.Stats.Range) continue;
 
-                    ref var hasTargetComponent = ref Startup.World.GetPool<HasTargetComponent>().Add(towerEntity);
+                    ref var hasTargetComponent = ref Startup.World.GetPool<HasTarget>().Add(towerEntity);
                     hasTargetComponent.Target = Startup.World.PackEntity(hitableEntity);
                     break;
                 }

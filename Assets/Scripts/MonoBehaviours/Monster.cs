@@ -17,12 +17,11 @@ namespace MonoBehaviours
         {
             var entity = Startup.World.NewEntity();
 
-            ref var movable = ref Startup.World.GetPool<MovableComponent>().Add(entity);
+            ref var movable = ref Startup.World.GetPool<Movable>().Add(entity);
             movable.Speed = Stats.MoveSpeed;
             movable.Rigidbody = _rigidbody;
 
             ref var hitable = ref Startup.World.GetPool<HitableComponent>().Add(entity);
-            hitable.MaxHealth = Stats.MaxHealth;
             hitable.CurrentHealth = Stats.MaxHealth;
             hitable.Transform = transform;
 

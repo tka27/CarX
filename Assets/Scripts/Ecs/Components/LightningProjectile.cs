@@ -2,9 +2,8 @@ using UnityEngine;
 
 namespace Ecs.Components
 {
-    public struct HitableComponent
+    public struct LightningProjectile
     {
         public Transform Transform;
-        public int CurrentHealth;
     }
 }

@@ -1,3 +1,4 @@
+using Data;
 using ExtensionsMain;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace MonoBehaviours
         public void Shoot(Transform from)
         {
             transform.position = from.position;
-            Rigidbody.velocity = from.forward * StartSpeed;
+            Rigidbody.velocity = from.forward * LevelData.Instance.CannonProjectilesSpeed;
         }
 
         private void OnValidate()

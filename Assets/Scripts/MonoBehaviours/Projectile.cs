@@ -11,7 +11,6 @@ namespace MonoBehaviours
     {
         public event Action OnLandedEvent;
         [SerializeField] private int _damage = 50;
-        [field: SerializeField] public float StartSpeed { get; private set; }
 
         void OnTriggerEnter(Collider other)
         {

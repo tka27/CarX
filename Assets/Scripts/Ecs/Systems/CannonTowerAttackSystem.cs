@@ -10,7 +10,7 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _towerFilter = Startup.World.Filter<CannonTowerComponent>().Inc<HasTargetComponent>()
+            _towerFilter = Startup.World.Filter<CannonTower>().Inc<HasTarget>()
                 .Exc<CooldownComponent>().End();
         }
 
@@ -18,16 +18,16 @@ namespace Ecs.Systems
         {
             foreach (var cannonEntity in _towerFilter)
             {
-                var cannonPool = Startup.World.GetPool<CannonTowerComponent>();
+                var cannonPool = Startup.World.GetPool<CannonTower>();
                 var cooldownPool = Startup.World.GetPool<CooldownComponent>();
                 var towerPool = Startup.World.GetPool<TowerBaseComponent>();
 
                 ref var cannonTower = ref cannonPool.Get(cannonEntity);
                 if (!cannonTower.Aimed) continue;
 
-                PoolContainer.Instance.CannonProjectiles.Get().Shoot(cannonTower.VerticalAimTransform);
-
-                cooldownPool.Add(cannonEntity).TimeLeft = towerPool.Get(cannonEntity).Stats.AttackCooldown;
+                ref var towerBase = ref towerPool.Get(cannonEntity);
+                PoolContainer.Instance.CannonProjectiles.Get().Shoot(towerBase.ShootPoint);
+                cooldownPool.Add(cannonEntity).TimeLeft = towerBase.Stats.AttackCooldown;
             }
         }
     }

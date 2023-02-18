@@ -9,13 +9,13 @@ namespace Ecs.Systems
 
         public void Init(EcsSystems systems)
         {
-            _filter = Startup.World.Filter<LightningProjectileComponent>().Inc<HasTargetComponent>().End();
+            _filter = Startup.World.Filter<LightningProjectile>().Inc<HasTarget>().End();
         }
 
         public void Run(EcsSystems systems)
         {
-            var hasTargetPool = Startup.World.GetPool<HasTargetComponent>();
-            var lightningProjectilePool = Startup.World.GetPool<LightningProjectileComponent>();
+            var hasTargetPool = Startup.World.GetPool<HasTarget>();
+            var lightningProjectilePool = Startup.World.GetPool<LightningProjectile>();
 
             foreach (var entity in _filter)
             {
