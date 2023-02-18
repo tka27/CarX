@@ -1,31 +1,27 @@
 using Data;
 using Ecs.Components;
+using Ecs.Providers;
 using Leopotam.EcsLite;
 
 namespace Ecs.Systems
 {
-    public class CrystalTowerAttackSystem : IEcsInitSystem, IEcsRunSystem
+    public class CrystalTowerAttackSystem : IEcsRunSystem
     {
-        private EcsFilter _towersFilter;
+        private readonly EcsFilter _towersFilter = Startup.World.Filter<TowerBase>().Inc<HasTarget>()
+            .Inc<CrystalTower>().Exc<Cooldown>().End();
 
-        public void Init(EcsSystems systems)
-        {
-            _towersFilter = Startup.World.Filter<TowerBaseComponent>().Inc<HasTarget>()
-                .Inc<CrystalTower>().Exc<CooldownComponent>().End();
-        }
+        private readonly EcsPool<HasTarget> _hasTargetPool = Startup.World.GetPool<HasTarget>();
 
         public void Run(EcsSystems systems)
         {
             foreach (var towerEntity in _towersFilter)
             {
-                var hasTargetPool = Startup.World.GetPool<HasTarget>();
-
-                ref var target = ref hasTargetPool.Get(towerEntity).Target;
-                ref var tower = ref Startup.World.GetPool<TowerBaseComponent>().Get(towerEntity);
+                ref var target = ref _hasTargetPool.Get(towerEntity).Target;
+                ref var tower = ref Startup.World.GetPool<TowerBase>().Get(towerEntity);
                 var projectile = PoolContainer.Instance.CrystalProjectiles.Get(tower.ShootPoint.position);
                 projectile.Fire(target);
 
-                Startup.World.GetPool<CooldownComponent>().Add(towerEntity).TimeLeft = tower.Stats.AttackCooldown;
+                Startup.World.GetPool<Cooldown>().Add(towerEntity).TimeLeft = tower.Stats.AttackCooldown;
             }
         }
     }

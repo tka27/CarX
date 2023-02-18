@@ -3,25 +3,21 @@ using Leopotam.EcsLite;
 
 namespace Ecs.Systems
 {
-    public class LightningProjectilesLifeControlSystem : IEcsInitSystem, IEcsRunSystem
+    public class LightningProjectilesLifeControlSystem : IEcsRunSystem
     {
-        private EcsFilter _filter;
+        private readonly EcsFilter _filter = Startup.World.Filter<LightningProjectile>().Inc<HasTarget>().End();
+        private readonly EcsPool<HasTarget> _hasTargetPool = Startup.World.GetPool<HasTarget>();
 
-        public void Init(EcsSystems systems)
-        {
-            _filter = Startup.World.Filter<LightningProjectile>().Inc<HasTarget>().End();
-        }
+        private readonly EcsPool<LightningProjectile> _lightningProjectilePool =
+            Startup.World.GetPool<LightningProjectile>();
 
         public void Run(EcsSystems systems)
         {
-            var hasTargetPool = Startup.World.GetPool<HasTarget>();
-            var lightningProjectilePool = Startup.World.GetPool<LightningProjectile>();
-
             foreach (var entity in _filter)
             {
-                if (hasTargetPool.Get(entity).Target.Unpack(Startup.World, out _)) continue;
+                if (_hasTargetPool.Get(entity).Target.Unpack(Startup.World, out _)) continue;
 
-                lightningProjectilePool.Get(entity).Transform.gameObject.SetActive(false);
+                _lightningProjectilePool.Get(entity).Transform.gameObject.SetActive(false);
             }
         }
     }

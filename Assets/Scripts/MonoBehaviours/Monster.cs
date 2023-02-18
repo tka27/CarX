@@ -21,7 +21,7 @@ namespace MonoBehaviours
             movable.Speed = Stats.MoveSpeed;
             movable.Rigidbody = _rigidbody;
 
-            ref var hitable = ref Startup.World.GetPool<HitableComponent>().Add(entity);
+            ref var hitable = ref Startup.World.GetPool<Hitable>().Add(entity);
             hitable.CurrentHealth = Stats.MaxHealth;
             hitable.Transform = transform;
 

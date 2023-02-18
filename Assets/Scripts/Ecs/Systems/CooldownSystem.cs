@@ -5,23 +5,20 @@ using UnityEngine;
 
 namespace Ecs.Systems
 {
-    public class CooldownSystem : IEcsInitSystem, IEcsRunSystem
+    public class CooldownSystem : IEcsRunSystem
     {
-        private EcsFilter _cooldownFilter;
+        private EcsFilter _cooldownFilter = Startup.World.Filter<Cooldown>().End();
 
-        public void Init(EcsSystems systems)
-        {
-            _cooldownFilter = Startup.World.Filter<CooldownComponent>().End();
-        }
+        private readonly EcsPool<Cooldown> _cooldownPool = Startup.World.GetPool<Cooldown>();
+
 
         public void Run(EcsSystems systems)
         {
-            var cooldownPool = Startup.World.GetPool<CooldownComponent>();
             foreach (var entity in _cooldownFilter)
             {
-                ref var cooldown = ref cooldownPool.Get(entity);
+                ref var cooldown = ref _cooldownPool.Get(entity);
                 cooldown.TimeLeft -= Time.deltaTime;
-                if (cooldown.TimeLeft < 0) cooldownPool.Del(entity);
+                if (cooldown.TimeLeft < 0) _cooldownPool.Del(entity);
             }
         }
     }

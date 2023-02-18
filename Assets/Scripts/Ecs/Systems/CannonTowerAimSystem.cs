@@ -1,34 +1,26 @@
-using Data;
 using Ecs.Components;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Ecs.Systems
 {
-    public class CannonTowerAimSystem : IEcsInitSystem, IEcsRunSystem
+    public class CannonTowerAimSystem : IEcsRunSystem
     {
-        private EcsFilter _towerFilter;
-
-        public void Init(EcsSystems systems)
-        {
-            _towerFilter = Startup.World.Filter<CannonTower>().Inc<HasTarget>().End();
-        }
+        private readonly EcsFilter _towerFilter = Startup.World.Filter<CannonTower>().Inc<HasTarget>().End();
+        private readonly EcsPool<CannonTower> _cannonPool = Startup.World.GetPool<CannonTower>();
+        private readonly EcsPool<HasTarget> _hasTargetPool = Startup.World.GetPool<HasTarget>();
+        private readonly EcsPool<Movable> _movablePool = Startup.World.GetPool<Movable>();
+        private readonly EcsPool<TowerBase> _towerPool = Startup.World.GetPool<TowerBase>();
 
         public void Run(EcsSystems systems)
         {
             foreach (var cannonEntity in _towerFilter)
             {
-                var cannonPool = Startup.World.GetPool<CannonTower>();
-                var hasTargetPool = Startup.World.GetPool<HasTarget>();
-                var movablePool = Startup.World.GetPool<Movable>();
-                var towerPool = Startup.World.GetPool<TowerBaseComponent>();
+                ref var cannonTower = ref _cannonPool.Get(cannonEntity);
+                ref var towerBase = ref _towerPool.Get(cannonEntity);
 
-
-                ref var cannonTower = ref cannonPool.Get(cannonEntity);
-                ref var towerBase = ref towerPool.Get(cannonEntity);
-
-                hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
-                var targetRigidbody = movablePool.Get(targetEntity).Rigidbody;
+                _hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
+                var targetRigidbody = _movablePool.Get(targetEntity).Rigidbody;
 
                 Vector3 predictionPoint = PredictionCalculator.GetPredictionPoint(towerBase.ShootPoint,
                     targetRigidbody, cannonTower.AimingResults.Projectile.Speed);

@@ -1,6 +1,6 @@
 namespace Ecs.Components
 {
-    public struct CooldownComponent
+    public struct Cooldown
     {
         public float TimeLeft;
     }

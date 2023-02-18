@@ -4,30 +4,26 @@ using Leopotam.EcsLite;
 
 namespace Ecs.Systems
 {
-    public class CannonTowerAttackSystem : IEcsInitSystem, IEcsRunSystem
+    public class CannonTowerAttackSystem : IEcsRunSystem
     {
-        private EcsFilter _towerFilter;
+        private readonly EcsFilter _towerFilter =
+            Startup.World.Filter<CannonTower>().Inc<HasTarget>().Exc<Cooldown>().End();
 
-        public void Init(EcsSystems systems)
-        {
-            _towerFilter = Startup.World.Filter<CannonTower>().Inc<HasTarget>()
-                .Exc<CooldownComponent>().End();
-        }
+        private readonly EcsPool<CannonTower> _cannonPool = Startup.World.GetPool<CannonTower>();
+        private readonly EcsPool<Cooldown> _cooldownPool = Startup.World.GetPool<Cooldown>();
+        private readonly EcsPool<TowerBase> _towerPool = Startup.World.GetPool<TowerBase>();
+
 
         public void Run(EcsSystems systems)
         {
             foreach (var cannonEntity in _towerFilter)
             {
-                var cannonPool = Startup.World.GetPool<CannonTower>();
-                var cooldownPool = Startup.World.GetPool<CooldownComponent>();
-                var towerPool = Startup.World.GetPool<TowerBaseComponent>();
-
-                ref var cannonTower = ref cannonPool.Get(cannonEntity);
+                ref var cannonTower = ref _cannonPool.Get(cannonEntity);
                 if (!cannonTower.Aimed) continue;
 
-                ref var towerBase = ref towerPool.Get(cannonEntity);
+                ref var towerBase = ref _towerPool.Get(cannonEntity);
                 PoolContainer.Instance.CannonProjectiles.Get().Shoot(towerBase.ShootPoint);
-                cooldownPool.Add(cannonEntity).TimeLeft = towerBase.Stats.AttackCooldown;
+                _cooldownPool.Add(cannonEntity).TimeLeft = towerBase.Stats.AttackCooldown;
             }
         }
     }

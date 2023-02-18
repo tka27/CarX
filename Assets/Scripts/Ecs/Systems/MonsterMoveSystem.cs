@@ -5,22 +5,16 @@ using UnityEngine;
 
 namespace Ecs.Systems
 {
-    public sealed class MonsterMoveSystem : IEcsRunSystem, IEcsInitSystem
+    public sealed class MonsterMoveSystem : IEcsRunSystem
     {
-        private EcsFilter _movableFilter;
-
-        public void Init(EcsSystems systems)
-        {
-            _movableFilter = Startup.World.Filter<Movable>().End();
-        }
+        private readonly EcsFilter _movableFilter = Startup.World.Filter<Movable>().End();
+        private readonly EcsPool<Movable> _movablePool = Startup.World.GetPool<Movable>();
 
         public void Run(EcsSystems systems)
         {
-            var movablePool = Startup.World.GetPool<Movable>();
-
             foreach (var entity in _movableFilter)
             {
-                var movable = movablePool.Get(entity);
+                var movable = _movablePool.Get(entity);
                 var targetVector = LevelData.Instance.MonstersTarget.position - movable.Rigidbody.position;
 
                 const float finishDistance = 0.5f;

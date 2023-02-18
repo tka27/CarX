@@ -1,37 +1,33 @@
 using Ecs.Components;
+using Ecs.Providers;
 using ExtensionsMain;
 using Leopotam.EcsLite;
 
 namespace Ecs.Systems
 {
-    public class TargetResetSystem : IEcsRunSystem, IEcsInitSystem
+    public class TargetResetSystem : IEcsRunSystem
     {
-        private EcsFilter _towerFilter;
+        private readonly EcsFilter _towerFilter = Startup.World.Filter<HasTarget>().Inc<TowerBase>().End();
 
-        public void Init(EcsSystems systems)
-        {
-            _towerFilter = Startup.World.Filter<HasTarget>().Inc<TowerBaseComponent>().End();
-        }
+        private readonly EcsPool<HasTarget> _hasTargetPool = Startup.World.GetPool<HasTarget>();
+        private readonly EcsPool<TowerBase> _towerPool = Startup.World.GetPool<TowerBase>();
+        private readonly EcsPool<Hitable> _hitablePool = Startup.World.GetPool<Hitable>();
+
 
         public void Run(EcsSystems systems)
         {
-            var hasTargetPool = Startup.World.GetPool<HasTarget>();
-            var towerPool = Startup.World.GetPool<TowerBaseComponent>();
-            var hitablePool = Startup.World.GetPool<HitableComponent>();
-
             foreach (var towerEntity in _towerFilter)
             {
-                if (!hasTargetPool.Get(towerEntity).Target.Unpack(Startup.World, out var targetEntity))
+                if (!_hasTargetPool.Get(towerEntity).Target.Unpack(Startup.World, out var targetEntity))
                 {
-                    hasTargetPool.Del(towerEntity);
+                    _hasTargetPool.Del(towerEntity);
                     continue;
                 }
 
-                ref var tower = ref towerPool.Get(towerEntity);
-                ref var hitable = ref hitablePool.Get(targetEntity);
-                float distance = tower.SelfTransform.DistanceTo(hitable.Transform.position);
+                ref var tower = ref _towerPool.Get(towerEntity);
+                float distance = tower.SelfTransform.DistanceTo(_hitablePool.Get(targetEntity).Transform.position);
 
-                if (distance > tower.Stats.Range) hasTargetPool.Del(towerEntity);
+                if (distance > tower.Stats.Range) _hasTargetPool.Del(towerEntity);
             }
         }
     }
