@@ -18,7 +18,10 @@ namespace MonoBehaviours
         public void Fire(EcsPackedEntity targetEntity)
         {
             var entity = Startup.World.NewEntity();
-            Startup.World.GetPool<Ecs.Components.LightningProjectile>().Add(entity).Transform = transform;
+            ref var projectile = ref Startup.World.GetPool<Ecs.Components.LightningProjectile>().Add(entity);
+            projectile.Speed = Speed;
+            projectile.Transform = transform;
+
             Startup.World.GetPool<HasTarget>().Add(entity).Target = targetEntity;
             _selfPackedEntity = Startup.World.PackEntity(entity);
         }

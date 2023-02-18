@@ -1,4 +1,3 @@
-using Data;
 using Ecs.Components;
 using Leopotam.EcsLite;
 
@@ -22,14 +21,14 @@ namespace Ecs.Systems
             {
                 if (!hasTargetPool.Get(entity).Target.Unpack(Startup.World, out var targetEntity)) continue;
                 var targetTransform = hitablePool.Get(targetEntity).Transform;
-                var projectileTransform = projectilesPool.Get(entity).Transform;
+                ref var projectile = ref projectilesPool.Get(entity);
 
-                var projectilePosition = projectileTransform.position;
-                var velocity = (targetTransform.position - projectilePosition).normalized *
-                               LevelData.Instance.LightningProjectilesSpeed;
+
+                var projectilePosition = projectile.Transform.position;
+                var velocity = (targetTransform.position - projectilePosition).normalized * projectile.Speed;
 
                 projectilePosition += velocity;
-                projectileTransform.position = projectilePosition;
+                projectile.Transform.position = projectilePosition;
             }
         }
     }

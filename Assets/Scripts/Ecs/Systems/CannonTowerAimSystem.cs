@@ -31,7 +31,7 @@ namespace Ecs.Systems
                 var targetRigidbody = movablePool.Get(targetEntity).Rigidbody;
 
                 Vector3 predictionPoint = PredictionCalculator.GetPredictionPoint(towerBase.ShootPoint,
-                    targetRigidbody, LevelData.Instance.CannonProjectilesSpeed);
+                    targetRigidbody, cannonTower.AimingResults.Projectile.Speed);
 
                 float distanceToTarget = (predictionPoint - towerBase.SelfTransform.position).magnitude;
                 float verticalAngle = cannonTower.AimingResults.GetVerticalAngle(distanceToTarget);

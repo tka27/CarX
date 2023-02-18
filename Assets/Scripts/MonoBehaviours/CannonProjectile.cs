@@ -14,7 +14,7 @@ namespace MonoBehaviours
         public void Shoot(Transform from)
         {
             transform.position = from.position;
-            Rigidbody.velocity = from.forward * LevelData.Instance.CannonProjectilesSpeed;
+            Rigidbody.velocity = from.forward * Speed;
         }
 
         private void OnValidate()

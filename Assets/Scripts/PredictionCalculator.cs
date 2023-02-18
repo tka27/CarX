@@ -3,34 +3,33 @@ using UnityEngine;
 
 public static class PredictionCalculator
 {
+    // public static Vector3 GetPredictionPoint(Transform shooter, Rigidbody target,
+    //     float projectileSpeed)
+    // {
+    //     var speedRatio = target.velocity.magnitude / projectileSpeed;
+    //     return target.position +
+    //            target.velocity.normalized * speedRatio * (shooter.position - target.position).magnitude;
+    // }
+
     public static Vector3 GetPredictionPoint(Transform shooter, Rigidbody target,
         float projectileSpeed)
     {
-        float speedRelation = target.velocity.magnitude / projectileSpeed;
-    
-        float sideA = speedRelation; //Относительное расстояние от цели до точки перехвата
-        float sideB = 1f; //Относительное расстояние от стрелка до точки перехвата
-    
-    
-        float distanceToTarget = (shooter.position - target.position).magnitude;
-    
-        float angleB =
-            Vector3.Angle(-(target.position - shooter.position), target.velocity); //Угол между стрелком и целью
-    
-        float deltaAngle = sideA / sideB * Mathf.Sin(angleB * Mathf.Deg2Rad);
-    
-        if (sideA > sideB && deltaAngle > 1) throw new Exception("Target is unreachable");
-        //Вычисляем угол между вектором движения стрелка и вектором от стрелка до точки перехвата
+        var lookVector = shooter.position - target.position;
+        float speedRatio = target.velocity.magnitude / projectileSpeed;
+
+        float angleB = Vector3.Angle(lookVector, target.velocity);
+
+        float deltaAngle = speedRatio * Mathf.Sin(angleB * Mathf.Deg2Rad);
+
+        if (speedRatio > 1 && deltaAngle > 1) throw new Exception("Target is unreachable");
         float angleC = Mathf.Asin(deltaAngle) * Mathf.Rad2Deg;
-    
-        //Вычисляем угол между вектором от стрелка до точки перехвата и вектором от цели до точки перехвата
+
         float angleA = 180f - angleB - angleC;
-    
-        //вычисляем тносительное расстояние от стрелка до цели
+
         float sideC = Mathf.Sin(angleA * Mathf.Deg2Rad) / Mathf.Sin(angleB * Mathf.Deg2Rad);
-    
-    
-        float fromTargetToPrediction = distanceToTarget / sideC * sideA;
+
+
+        float fromTargetToPrediction = lookVector.magnitude / sideC * speedRatio;
         return target.velocity.normalized * fromTargetToPrediction + target.position;
     }
 }
