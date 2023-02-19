@@ -6,10 +6,7 @@ namespace Data
     {
         public static LevelData Instance { get; private set; }
 
-
         [field: SerializeField] public Transform MonstersTarget { get; private set; }
-        [field: SerializeField] public Transform MonstersSpawnPoint { get; private set; }
-        [field: SerializeField, Min(0)] public float MonstersSpawnCooldown { get; private set; }
 
         private void Awake()
         {
