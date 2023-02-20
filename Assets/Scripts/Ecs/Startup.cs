@@ -22,9 +22,6 @@ namespace Ecs
             _fixedSystems = new EcsSystems(World);
 
             _systems
-#if UNITY_EDITOR
-                .Add(new Leopotam.EcsLite.UnityEditor.EcsWorldDebugSystem())
-#endif
                 .ConvertScene()
                 .Add(new MonsterSpawnSystem())
                 .Add(new TargetSelectionSystem())
