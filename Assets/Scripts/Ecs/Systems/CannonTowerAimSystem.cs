@@ -22,7 +22,7 @@ namespace Ecs.Systems
                 _hasTargetPool.Get(cannonEntity).Target.Unpack(Startup.World, out var targetEntity);
                 var targetRigidbody = _movablePool.Get(targetEntity).Rigidbody;
 
-                Vector3 predictionPoint = PredictionCalculator.GetPredictionPoint(towerBase.ShootPoint,
+                Vector3 predictionPoint = InterceptCalculator.GetInterceptPoint(towerBase.ShootPoint,
                     targetRigidbody, cannonTower.AimingResults.Projectile.Speed);
 
                 float distanceToTarget = (predictionPoint - towerBase.SelfTransform.position).magnitude;
