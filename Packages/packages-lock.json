@@ -1,11 +1,10 @@
 {
   "dependencies": {
     "com.leopotam.ecslite": {
-      "version": "https://github.com/voody2506/ecslite.git",
+      "version": "file:../ecslite-master",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "438b839bc1d7fff5ccb2ba99b548f4ef9711f299"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.collab-proxy": {
       "version": "1.17.6",
@@ -163,11 +162,10 @@
       "url": "https://packages.unity.com"
     },
     "com.voody.unileo.lite": {
-      "version": "https://github.com/voody2506/UniLeo-Lite.git",
+      "version": "file:../UniLeo-Lite-main",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "3726d31b5acbdf683edb372ea1efb74a12321c17"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
